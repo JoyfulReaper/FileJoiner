@@ -72,7 +72,7 @@ namespace FileJoinerLibrary
 
                 if(numNewLines >= 0)
                 {
-                    swOut.Write(string.Concat(Enumerable.Repeat(Environment.NewLine, 2)));
+                    swOut.Write(string.Concat(Enumerable.Repeat(Environment.NewLine, numNewLines)));
                 }
 
                 srIn.Close();

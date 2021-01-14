@@ -121,11 +121,14 @@ namespace FileJoinerUI
 
             if (checkBoxAllTextFiles.Checked)
             {
-                int numNewLine;
-
-                if (!int.TryParse(textBoxNewLines.Text, out numNewLine))
+                int numNewLine = 0;
+                if (checkBoxNewLines.Checked)
                 {
-                    MessageBox.Show("Please enter a valid number of NewLines");
+                    if (!int.TryParse(textBoxNewLines.Text, out numNewLine) || numNewLine < 0)
+                    {
+                        MessageBox.Show("Please enter a valid number of NewLines");
+                        return;
+                    }
                 }
 
                 FileJoiner.JoinTextFiles(filesToJoin.ToList(), numNewLine, $"{outputPath}\\{textBoxOutputFileName.Text}");

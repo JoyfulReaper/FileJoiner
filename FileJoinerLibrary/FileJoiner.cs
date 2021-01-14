@@ -70,7 +70,7 @@ namespace FileJoinerLibrary
                 var srIn = inputfile.OpenText();
                 swOut.Write(srIn.ReadToEnd());
 
-                if(numNewLines >= 0)
+                if(numNewLines > 0)
                 {
                     swOut.Write(string.Concat(Enumerable.Repeat(Environment.NewLine, numNewLines)));
                 }

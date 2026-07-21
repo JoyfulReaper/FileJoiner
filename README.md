@@ -63,4 +63,10 @@ Run a build before submitting changes:
 dotnet build FileJoiner.sln
 ```
 
+Run the automated tests:
+
+```powershell
+dotnet test FileJoiner.sln
+```
+
 The project is licensed under the MIT License. See `LICENSE.md` for details.

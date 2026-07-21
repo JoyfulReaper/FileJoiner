@@ -60,12 +60,13 @@ namespace FileJoinerLibrary
             FileInfo output = new FileInfo(outputFile);
             using StreamWriter swOut = output.CreateText();
 
-            foreach (FileInfo inputFile in files)
+            for (int i = 0; i < files.Count; i++)
             {
+                FileInfo inputFile = files[i];
                 using StreamReader srIn = inputFile.OpenText();
                 swOut.Write(srIn.ReadToEnd());
 
-                if (numNewLines > 0)
+                if (numNewLines > 0 && i < files.Count - 1)
                 {
                     swOut.Write(string.Concat(Enumerable.Repeat(Environment.NewLine, numNewLines)));
                 }

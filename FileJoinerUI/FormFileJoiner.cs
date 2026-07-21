@@ -107,7 +107,9 @@ namespace FileJoinerUI
                 return;
             }
 
-            if (File.Exists($"{ outputPath}\\{ textBoxOutputFileName.Text}"))
+            string outputFile = Path.Combine(outputPath, textBoxOutputFileName.Text);
+
+            if (File.Exists(outputFile))
             {
                 var result = MessageBox.Show($"{textBoxOutputFileName.Text}: Output file exists. Over write file?", "Over write file?", MessageBoxButtons.YesNo);
 
@@ -117,30 +119,39 @@ namespace FileJoinerUI
                 }
             }
 
-            btnJoin.Enabled = false;
-
-            if (checkBoxAllTextFiles.Checked)
+            try
             {
-                int numNewLine = 0;
-                if (checkBoxNewLines.Checked)
+                btnJoin.Enabled = false;
+
+                if (checkBoxAllTextFiles.Checked)
                 {
-                    if (!int.TryParse(textBoxNewLines.Text, out numNewLine) || numNewLine < 0)
+                    int numNewLine = 0;
+                    if (checkBoxNewLines.Checked)
                     {
-                        MessageBox.Show("Please enter a valid number of NewLines");
-                        return;
+                        if (!int.TryParse(textBoxNewLines.Text, out numNewLine) || numNewLine < 0)
+                        {
+                            MessageBox.Show("Please enter a valid number of NewLines");
+                            return;
+                        }
                     }
+
+                    FileJoiner.JoinTextFiles(filesToJoin.ToList(), numNewLine, outputFile);
+                }
+                else
+                {
+                    FileJoiner.JoinFiles(filesToJoin.ToList(), outputFile);
                 }
 
-                FileJoiner.JoinTextFiles(filesToJoin.ToList(), numNewLine, $"{outputPath}\\{textBoxOutputFileName.Text}");
+                MessageBox.Show("Join completed!");
             }
-            else
+            catch (Exception ex)
             {
-                FileJoiner.JoinFiles(filesToJoin.ToList(), $"{outputPath}\\{textBoxOutputFileName.Text}");
+                MessageBox.Show($"Unable to join files: {ex.Message}");
             }
-
-            btnJoin.Enabled = true;
-
-            MessageBox.Show("Join completed!");
+            finally
+            {
+                btnJoin.Enabled = true;
+            }
         }
 
         private void checkBoxAllTextFiles_CheckedChanged(object sender, EventArgs e)

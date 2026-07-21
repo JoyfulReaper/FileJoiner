@@ -27,7 +27,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace FileJoinerLibrary
 {
@@ -41,17 +40,13 @@ namespace FileJoinerLibrary
         public static void JoinFiles(List<FileInfo> files, string outputFile)
         {
             FileInfo output = new FileInfo(outputFile);
-            FileStream fsOut = output.Create();
+            using FileStream fsOut = output.Create();
 
-            foreach(FileInfo inputFile in files)
+            foreach (FileInfo inputFile in files)
             {
-                var fsIn = inputFile.Open(FileMode.Open);
+                using FileStream fsIn = inputFile.Open(FileMode.Open);
                 fsIn.CopyTo(fsOut);
-
-                fsIn.Close();
             }
-
-            fsOut.Close();
         }
 
         /// <summary>
@@ -63,22 +58,18 @@ namespace FileJoinerLibrary
         public static void JoinTextFiles(List<FileInfo> files, int numNewLines, string outputFile)
         {
             FileInfo output = new FileInfo(outputFile);
-            StreamWriter swOut = output.CreateText();
+            using StreamWriter swOut = output.CreateText();
 
-            foreach (FileInfo inputfile in files)
+            foreach (FileInfo inputFile in files)
             {
-                var srIn = inputfile.OpenText();
+                using StreamReader srIn = inputFile.OpenText();
                 swOut.Write(srIn.ReadToEnd());
 
-                if(numNewLines > 0)
+                if (numNewLines > 0)
                 {
                     swOut.Write(string.Concat(Enumerable.Repeat(Environment.NewLine, numNewLines)));
                 }
-
-                srIn.Close();
             }
-
-            swOut.Close();
         }
     }
 }
